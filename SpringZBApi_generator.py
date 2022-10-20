@@ -1,13 +1,13 @@
 # This is a sample Python script.
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-import wget
 import json
 import urllib.request
 import re
 import os
-import time
+
+
+#See
+#https://studio.zerobrane.com/doc-api-auto-complete
 
 wikiPageNames = ['Lua:Callins', 'Lua_System', 'Lua_ConstGame', 'Lua_ConstEngine', 'Lua_ConstPlatform',
                 'Lua_ConstCOB', 'Lua_SyncedCtrl', 'Lua_SyncedRead', 'Lua_UnsyncedCtrl', 'Lua_UnsyncedRead',
@@ -85,9 +85,9 @@ def parseContents(lines,pagename):
                 for j in range(1,10):
                     argi = 'arg%d'%j
                     if argi in callout and len(callout[argi])>0:
-                        args.append(callout[argi])
-                args = ', '.join(args)
-                args = stripwikimarks(args)
+                        args.append(stripwikimarks(callout[argi]))
+                #args = ', '.join(args)
+                #args = stripwikimarks(args)
                 if len(args) > 0:
                     luacallout['args'] = args
 
@@ -176,6 +176,8 @@ def recursecreatetable(res, table, depth=0):
             res.append('\t'*depth + k + ' = {')
             recursecreatetable(res,v,depth+1)
             res.append('\t' * depth +'},')
+        elif type(v) is list:
+            res.append("\t"*depth+k+' = '+ '\'' + ', '.join([str(v2) for v2 in v])+'\',')
         else:
             if k == 'description':
                 res.append("\t"*depth+k+' = '+ '[[' + v+' ]],')
@@ -184,7 +186,7 @@ def recursecreatetable(res, table, depth=0):
     return res
 
 # Press the green button in the gutter to run the script.
-if __name__ == '__main__':
+if True: #__name__ == '__main__':
     print_hi('PyCharm')
     get_pageContents(wikiPageNames[0])
     #exit(1)
@@ -192,10 +194,16 @@ if __name__ == '__main__':
         get_pageContents(pn)
         #time.sleep(1)
     del constants['Spring']
+
+    # For all the callouts, add the shorthand versions too!
     mytable = ['return {']
     mytable = recursecreatetable(mytable,callouts,1)
     mytable = recursecreatetable(mytable,callins,1)
     mytable = recursecreatetable(mytable,constants,1)
+    for membername, value in callouts['Spring']['childs'].items():
+        recursecreatetable(mytable, {'sp'+membername : value},1)
+    for membername, value in callouts['gl']['childs'].items():
+        recursecreatetable(mytable, {'gl'+membername : value},1)
     mytable.append('}')
     #print('\n'.join(mytable))
     outf = open("springzbapi.lua",'w')
