@@ -114,7 +114,8 @@ function widget:Initialize()
 		end
 	end
 
-	--[[ -- THESE DO NOT WORK< SOMEONE BROKE PAIRS!
+	--THESE DO NOT WORK< SOMEONE BROKE PAIRS!
+	--[[
 	for id,featureDef in pairs(FeatureDefs) do
 		--local ff, pp = next(featureDef:pairs())
 		
@@ -130,6 +131,12 @@ function widget:Initialize()
 				break
 			end
 		end
+	end]]--
+	
+	for id,featureDef in pairs(FeatureDefs) do
+		for name,param in featureDef:pairs() do
+			recurseparseall(exampleAPI['featureDef']['childs'],name,param)
+		end
 	end
 	
 	for id,weaponDef in pairs(WeaponDefs) do
@@ -138,7 +145,7 @@ function widget:Initialize()
 			recurseparseall(exampleAPI['weaponDef']['childs'],name,param)
 		end
 	end
-	]]--
+	
 	--Spring.Debug.TableEcho(exampleAPI)
 	local t = {'','return {'}
 	recurseprint(exampleAPI,1,t)
