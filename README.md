@@ -19,3 +19,9 @@ Be amazed by autocompletion, argument and return value completion, along with so
 
 1. Run the python file to scrape springrts wiki and generate springzbapi.lua
 2. Enable the widget ingame to generate springzbdef.lua
+
+## For GLSL Shader Programming
+
+Install https://github.com/pixeljetstream/zbstudio-graphicscodepack into `ZeroBraneStudio\packages` 
+
+![image](https://github.com/beyond-all-reason/ZBStudioAPI/assets/109391/96886f4c-63ea-4116-a74f-3d0a9da5bd21)
